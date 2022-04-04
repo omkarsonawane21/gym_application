@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Gym</string>
+    <string-array name="typeofregistrar">
+        <item>User</item>
+        <item>Trainer</item>
+        <item>Gym Owner</item>
+    </string-array>
+</resources>
