@@ -6,17 +6,15 @@ import android.content.Intent;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.example.gym.R;
 import com.example.gym.main.OwnerScreen;
 import com.example.gym.main.TrainerScreen;
 import com.example.gym.main.UserScreen;
 import com.example.gym.signup.Signup;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,9 +34,8 @@ public class Login extends AppCompatActivity {
 
     // general use recvd from server
     private String loginid_from_server;
-    private String username_from_server;
-    private String password_from_server;
 
+    private boolean username_exist = false, password_exist = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +48,7 @@ public class Login extends AppCompatActivity {
         // get list of data from server to verify with uname and password entered by user
     }
     public void login(View v) throws IOException {
-        URL url = new URL("http://10.100.109.85:5000/login");
+        URL url = new URL("http://10.0.2.2:5000/login");
         URLConnection request = url.openConnection();
         try {
             request.connect();
@@ -63,45 +60,48 @@ public class Login extends AppCompatActivity {
             }
             br.close();
             line = sb.toString();
-            System.out.println(line);
+
+            uname = findViewById(R.id.uname);
+            password = findViewById(R.id.password);
+            nameText = uname.getText().toString();
+            passText = password.getText().toString();
 
             JSONArray arr = new JSONArray(line);
             JSONArray a = null;
             for(int i = 0; i < arr.length(); i++){
                 a = new JSONArray(arr.get(i).toString());
+
+                if(nameText.equals(a.get(0).toString())){
+                    username_exist = true;
+                    if(passText.equals(a.get(1).toString())){
+                        password_exist = true;
+                        loginid_from_server = a.get(2).toString();
+                        break;
+                    }
+                }
             }
-            // this is totally wrong
-            // first u need to search in that array whether the username exists
-            // then check for password
-            username_from_server = a.get(0).toString();
-            password_from_server = a.get(1).toString();
-            loginid_from_server = a.get(2).toString();
         }
         catch (IOException | JSONException e){
             System.out.println(e);
         }
 
-        uname = findViewById(R.id.uname);
-        password = findViewById(R.id.password);
-        nameText = uname.getText().toString();
-        passText = password.getText().toString();
-
-        if(nameText.equals(username_from_server)){   // means check in the list recvd from server
-            if(passText.equals(password_from_server)){
-
-                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-
+        if(username_exist){   // means check in the list recvd from server
+            if(password_exist){
                 Intent intent;
                 if(Character.compare(loginid_from_server.charAt(0), '3') == 0) {
+                    Toast.makeText(this, "Logged in successfully as Trainer!", Toast.LENGTH_SHORT).show();
                     intent = new Intent(this, TrainerScreen.class);
                 }
                 else if(Character.compare(loginid_from_server.charAt(0), '4') == 0){
+                    Toast.makeText(this, "Logged in successfully as Owner!", Toast.LENGTH_SHORT).show();
                     intent = new Intent(this, OwnerScreen.class);
                 }
                 else{
+                    Toast.makeText(this, "Logged in successfully as User!", Toast.LENGTH_SHORT).show();
                     intent = new Intent(this, UserScreen.class);
                 }
 
+                //to pass username and id from one screen to another
                 intent.putExtra(username, nameText);
                 intent.putExtra(loginid, loginid_from_server);
                 startActivity(intent);

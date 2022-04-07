@@ -3,34 +3,30 @@ package com.example.gym.signup;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gym.R;
 import com.example.gym.login.Login;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Signup extends AppCompatActivity {
+public class Signup extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     // get the textviews from layout
     private TextView name;
     private TextView mobile;
@@ -39,6 +35,9 @@ public class Signup extends AppCompatActivity {
     private TextView usernames;
     private TextView passwd;
 
+    private String type;
+
+    private Spinner spinner;
 //    private ImageView IVPreviewImage;
     // constant to compare the activity result code
     private int SELECT_PICTURE = 200;
@@ -48,26 +47,30 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
         Intent intent = getIntent();
-
-    }
-    public void signup(View v){
-        Spinner spinner = (Spinner) findViewById(R.id.typeofregistrar);
-// Create an ArrayAdapter using the string array and a default spinner layout
+        spinner = (Spinner) findViewById(R.id.typeofregistrar);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.typeofregistrar, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        String type = spinner.getSelectedItem().toString();
+        spinner.setOnItemSelectedListener(this);
+    }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        type = adapterView.getItemAtPosition(i).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        type = "User";
+    }
+    public void signup(View v){
         name = findViewById(R.id.name);
-        mobile = findViewById(R.id.mobile);
+        mobile = findViewById(R.id.gymmobile);
         aadhar = findViewById(R.id.aadhar);
-        email = findViewById(R.id.email);
+        email = findViewById(R.id.gymemail);
         usernames = findViewById(R.id.username);
         passwd = findViewById(R.id.passwd);
-
 
         JSONArray arr = new JSONArray();
         arr.put(usernames.getText().toString());
@@ -77,12 +80,13 @@ public class Signup extends AppCompatActivity {
         arr.put(aadhar.getText().toString());
         arr.put(email.getText().toString());
         arr.put(type);
-        JSONArray finalarray = new JSONArray();
-        finalarray.put(arr);
+//        JSONArray finalarray = new JSONArray();
+//        finalarray.put(arr);
 
-        String url = "http://10.100.109.85:5000/register";
+        String url = "http://10.0.2.2:5000/register";
         RequestQueue rs = Volley.newRequestQueue(this);
 
+        // we are sending only 1D array i.e arr
         JsonArrayRequest request_json = new JsonArrayRequest(Request.Method.POST, url, arr,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -90,7 +94,13 @@ public class Signup extends AppCompatActivity {
                         //Get Final response
                         for(int i = 0; i < response.length(); i++){
                             try {
-                                System.out.println(response.get(i).toString());
+                                if(response.get(i).toString().equals("1")){
+                                    goto_loginscreen(true);
+                                }
+                                else{
+                                    goto_loginscreen(false);
+                                }
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -104,16 +114,21 @@ public class Signup extends AppCompatActivity {
                 headers.put("Content-Type","application/json");
                 return headers;
             }
-
         };
         rs.add(request_json);
-
-        Intent intent = new Intent(this, Login.class);
-        Toast.makeText(this, name.getText().toString() + " Registered successfully!", Toast.LENGTH_SHORT).show();
-        // send data to server
-        startActivity(intent);
     }
 
+    public void goto_loginscreen(boolean registered_or_not) {
+        if(registered_or_not){
+            Intent intent = new Intent(this, Login.class);
+            Toast.makeText(this, name.getText().toString() + " Registered successfully!", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
+        }
+        else{
+            Toast.makeText(this, "Error in Registration!", Toast.LENGTH_SHORT).show();
+        }
+    }
+    //code to choose the image
     public void imageChooser(View v) {
 
         // create an instance of the
@@ -137,10 +152,12 @@ public class Signup extends AppCompatActivity {
             if (requestCode == SELECT_PICTURE) {
                 // Get the url of the image from data
                 Uri selectedImageUri = data.getData();
-//                if (null != selectedImageUri) {
-//                    // update the preview image in the layout
-//                    IVPreviewImage.setImageURI(selectedImageUri);
-//                }
+                if (null != selectedImageUri) {
+                    // update the preview image in the layout
+                    IVPreviewImage.setImageURI(selectedImageUri);
+
+
+                }
             }
         }
     }

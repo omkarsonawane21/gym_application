@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".signup.Signup">
+    tools:context=".trainer.UpdateTrainerProfile">
+
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/trainermobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="Mobile Number"
         android:inputType="textPersonName"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,102 +21,82 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/gymmobile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="Mobile Number"
-        android:inputType="textPersonName"
-        android:textSize="21sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
-        android:id="@+id/aadhar"
+        android:id="@+id/traineremail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Aadhar Number"
-        android:inputType="textPersonName"
-        android:textSize="21sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gymmobile" />
-
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="textPersonName"
-        android:textSize="21sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gymemail" />
-
-    <EditText
-        android:id="@+id/gymemail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="xyz@gmail.com"
         android:inputType="textEmailAddress"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aadhar" />
+        app:layout_constraintTop_toBottomOf="@+id/trainermobile" />
 
     <EditText
-        android:id="@+id/passwd"
+        android:id="@+id/trainerinfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
+        android:hint="Introduce yourself"
+        android:inputType="textPersonName"
+        android:textSize="21sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/traineremail" />
+
+    <EditText
+        android:id="@+id/trainersgym"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Gym name"
+        android:textSize="21sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trainerinfo" />
+
+    <Button
+        android:id="@+id/uploadcertificates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="252dp"
+        android:onClick="trainerimageChooser"
+        android:text="Upload Certificates"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/trainersgym" />
 
     <Button
-        android:id="@+id/gymregister"
+        android:id="@+id/traineruploadprofilepic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="signup"
-        android:text="Register"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uploadprofile" />
-
-    <Spinner
-        android:id="@+id/typeofregistrar"
-        android:layout_width="409dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="28dp"
-        android:entries="@array/typeofregistrar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwd" />
-
-    <Button
-        android:id="@+id/uploadprofile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:onClick="imageChooser"
+        android:layout_marginTop="8dp"
+        android:onClick="trainerimageChooser"
         android:text="Upload Profile Pic"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeofregistrar" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadcertificates" />
+
+    <Button
+        android:id="@+id/updatetrainerprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="update_trainerprofile"
+        android:text="Update"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/traineruploadprofilepic"
+        app:layout_constraintVertical_bias="0.468" />
 </androidx.constraintlayout.widget.ConstraintLayout>
